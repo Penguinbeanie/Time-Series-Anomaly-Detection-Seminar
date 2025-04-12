@@ -84,10 +84,15 @@ if __name__ == '__main__':
         ### whether to save the evaluation result
         if args.save:
             try:
-                evaluation_result = get_metrics(output, label, metric='all', slidingWindow=slidingWindow)
+                evaluation_result = get_metrics(output, label, slidingWindow=slidingWindow)
                 print('evaluation_result: ', evaluation_result)
                 list_w = list(evaluation_result.values())
-            except:
+            except Exception as e:
+                logging.error(f"Error calling get_metrics for {filename}: {e}")
+                logging.error(f"Output shape: {output.shape}, Label shape: {label.shape}, Sliding window: {slidingWindow}")
+                # Optionally log parts of the arrays if helpful, e.g.:
+                # logging.error(f"Output sample: {output[:10]}")
+                # logging.error(f"Label sample: {label[:10]}")
                 list_w = [0]*9
             list_w.insert(0, run_time)
             list_w.insert(0, filename)
