@@ -36,6 +36,7 @@ if __name__ == '__main__':
     parser.add_argument('--save', type=bool, default=True)
     parser.add_argument('--AD_Name', type=str, default='IForest')
     args = parser.parse_args()
+    
 
 
     target_dir = os.path.join(args.score_dir, args.AD_Name)
