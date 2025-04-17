@@ -1,0 +1,9 @@
+name: 
+  /Users/kai/Documents/Time_Series_Anomaly_Detection_Seminar/Time-Series-Anomaly-Detection-Seminar/.conda
+channels:
+  - https://repo.anaconda.com/pkgs/main
+  - https://repo.anaconda.com/pkgs/r
+dependencies:
+  - python=3.11
+prefix: 
+  /Users/kai/Documents/Time_Series_Anomaly_Detection_Seminar/Time-Series-Anomaly-Detection-Seminar/.conda
