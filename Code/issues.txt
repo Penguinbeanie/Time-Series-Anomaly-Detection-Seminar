@@ -1,0 +1,20 @@
+momentfm 0.1.4 requires numpy==1.25.2, but you have numpy 2.2.5 which is incompatible.
+tsb-ad 1.5 requires numpy<2.0,>=1.24.3, but you have numpy 2.2.5 which is incompatible.
+tsb-ad 1.5 requires transformers>=4.38.0, but you have transformers 4.33.3 which is incompatible.
+
+momentfm 0.1.4 requires numpy==1.25.2, but you have numpy 1.24.3 which is incompatible.
+timesfm 1.2.0 requires numpy>=1.26.4, but you have numpy 1.24.3 which is incompatible.
+timesfm 1.2.0 requires pandas>=2.1.4, but you have pandas 2.0.3 which is incompatible.
+tsb-ad 1.5 requires transformers>=4.38.0, but you have transformers 4.33.3 which is incompatible.
+
+Moment_ZS works
+
+timesFT breaks everything
+
+laglama no ckpt file on github repo
+
+ERROR: No matching distribution found for autogluon.core==1.2.1b20250420
+
+EIF causes 100% CPU and RAM usaga, model doesnt run
+
+PCA stops GPU usage for neural net models (AutoEncoder)

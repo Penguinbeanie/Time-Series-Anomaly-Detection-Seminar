@@ -219,6 +219,69 @@ class basic_metricor():
             F1 = F[1]
         return F1
 
+    def metric_PointF1_with_threshold(self, label, score, preds=None):
+        if preds is None:
+            label_binary = (np.asarray(label) > 0.5).astype(int)
+            if np.sum(label_binary) == 0: # No positive labels
+                # If no true anomalies, any threshold that classifies nothing as anomaly is "optimal" for F1 (0/0=0)
+                # Return F1=0, and a threshold that classifies nothing as anomaly.
+                return 0.0, np.max(score) + 1e-5 if len(score) > 0 else 0.0
+
+            # Ensure scores are finite and not all identical for precision_recall_curve
+            if not np.all(np.isfinite(score)):
+                # Handle cases with NaNs or Infs if necessary, or assume score is clean.
+                # For now, proceed, precision_recall_curve might error or handle.
+                pass # Or log a warning
+
+            unique_scores = np.unique(score)
+            if len(unique_scores) == 1:
+                # If all scores are the same.
+                # Predict based on majority or a safe choice (e.g., predict no anomalies).
+                # This specific handling might need refinement based on desired behavior for this edge case.
+                # For now, if all scores are same, predict no anomalies if there are true positives,
+                # or all anomalies if all labels are positive.
+                if np.all(label_binary):
+                    return metrics.f1_score(label_binary, (score >= unique_scores[0]).astype(int), zero_division=0), unique_scores[0] - 1e-5
+                elif np.any(label_binary): # Mixed or some anomalies
+                    # Default to predicting no anomalies (F1=0) if all scores are same and not all labels are anomalies
+                    return 0.0, unique_scores[0] + 1e-5
+                else: # No anomalies, all scores same
+                    return 0.0, unique_scores[0] + 1e-5
+
+            precision, recall, pr_thresholds = metrics.precision_recall_curve(label_binary, score)
+
+            if len(pr_thresholds) == 0:
+                # This can happen if precision_recall_curve doesn't yield thresholds
+                if np.all(label_binary): # If all true labels are anomalies
+                    return 1.0, np.min(score) - 1e-5 if len(score) > 0 else 0.0
+                # Default to predicting no anomalies if thresholding is degenerate
+                return 0.0, np.max(score) + 1e-5 if len(score) > 0 else 0.0
+
+            # Align precision and recall with pr_thresholds: P/R values at index i are for threshold[i]
+            # Typically, precision_recall_curve returns P/R arrays of size N+1 and thresholds of size N.
+            # We need F1 scores for each threshold.
+            f1_denom = precision[:-1] + recall[:-1] # Use P/R pairs corresponding to thresholds
+            f1_scores_aligned = np.zeros_like(f1_denom)
+            valid_denom_indices = f1_denom > 1e-8 # Avoid division by zero or near-zero
+            f1_scores_aligned[valid_denom_indices] = (2 * precision[:-1][valid_denom_indices] * recall[:-1][valid_denom_indices]) / f1_denom[valid_denom_indices]
+
+            f1_scores_aligned = np.nan_to_num(f1_scores_aligned, nan=0.0) # Convert any remaining NaNs to 0
+
+            if len(f1_scores_aligned) == 0:
+                return 0.0, np.max(score) + 1e-5 if len(score) > 0 else 0.0
+
+            best_f1_idx = np.argmax(f1_scores_aligned)
+            best_f1 = f1_scores_aligned[best_f1_idx]
+            optimal_threshold = pr_thresholds[best_f1_idx]
+
+            return best_f1, optimal_threshold
+        else: # preds is not None (external predictions provided)
+            preds_binary = (np.asarray(preds) > 0.5).astype(int)
+            label_binary = (np.asarray(label) > 0.5).astype(int)
+
+            f1_val = metrics.f1_score(label_binary, preds_binary, pos_label=1, average='binary', zero_division=0)
+            return f1_val, None # No threshold calculated, as preds are given
+
     def metric_Affiliation(self, label, score, preds=None):
         from .affiliation.generics import convert_vector_to_events
         from .affiliation.metrics import pr_from_events
