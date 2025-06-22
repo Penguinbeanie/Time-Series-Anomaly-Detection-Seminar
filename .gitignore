@@ -1,0 +1,9 @@
+# Ignore large dataset directories
+TSB-AD/Datasets/TSB-AD-M/
+TSB-AD/Datasets/TSB-AD-U/
+
+# Ignore evaluation results and temporary files
+eval/
+*.npy
+*.csv
+*.log 
