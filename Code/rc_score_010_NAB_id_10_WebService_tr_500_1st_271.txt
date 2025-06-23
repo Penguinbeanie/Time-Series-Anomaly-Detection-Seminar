@@ -1,0 +1,6 @@
+Analysis completed at: 2025-06-11 07:39:07
+Total execution time: 33.12 seconds
+Relative Contrast Score: 8.656132851243983
+Window Size Used: 10
+Input File: C:\Users\Kai\Documents\Time_Series_Anomaly_Detection\Time-Series-Anomaly-Detection-Seminar\TSB-AD\Datasets\TSB-AD-U\010_NAB_id_10_WebService_tr_500_1st_271.csv
+Number of subsequences analyzed: 991

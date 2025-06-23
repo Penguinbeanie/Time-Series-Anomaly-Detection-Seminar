@@ -1,0 +1,6 @@
+Analysis completed at: 2025-06-11 07:35:17
+Total execution time: 92.88 seconds
+Relative Contrast Score: 15.54460496449068
+Window Size Used: 10
+Input File: C:\Users\Kai\Documents\Time_Series_Anomaly_Detection\Time-Series-Anomaly-Detection-Seminar\TSB-AD\Datasets\TSB-AD-U\579_YAHOO_id_29_WebService_tr_500_1st_1342.csv
+Number of subsequences analyzed: 1671
